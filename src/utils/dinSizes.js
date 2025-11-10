@@ -7,8 +7,50 @@ export const DIN_SIZES = {
   'A4': { width: 210, height: 297, label: 'DIN A4 (210 × 297 mm)' },
 };
 
+// Tabla de conversiones exactas entre formatos DIN
+// Cada formato es exactamente 2^n veces el A4
+// A0 = 16×A4, A1 = 8×A4, A2 = 4×A4, A3 = 2×A4, A4 = 1×A4
+const DIN_CONVERSION_TABLE = {
+  'A0': {
+    'A0': { cols: 1, rows: 1 },
+    'A1': { cols: 2, rows: 1 },
+    'A2': { cols: 2, rows: 2 },
+    'A3': { cols: 4, rows: 2 },
+    'A4': { cols: 4, rows: 4 },
+  },
+  'A1': {
+    'A0': { cols: 1, rows: 1 }, // No tiene sentido pero por completitud
+    'A1': { cols: 1, rows: 1 },
+    'A2': { cols: 2, rows: 1 },
+    'A3': { cols: 2, rows: 2 },
+    'A4': { cols: 4, rows: 2 },
+  },
+  'A2': {
+    'A0': { cols: 1, rows: 1 },
+    'A1': { cols: 1, rows: 1 },
+    'A2': { cols: 1, rows: 1 },
+    'A3': { cols: 2, rows: 1 },
+    'A4': { cols: 2, rows: 2 },
+  },
+  'A3': {
+    'A0': { cols: 1, rows: 1 },
+    'A1': { cols: 1, rows: 1 },
+    'A2': { cols: 1, rows: 1 },
+    'A3': { cols: 1, rows: 1 },
+    'A4': { cols: 2, rows: 1 },
+  },
+  'A4': {
+    'A0': { cols: 1, rows: 1 },
+    'A1': { cols: 1, rows: 1 },
+    'A2': { cols: 1, rows: 1 },
+    'A3': { cols: 1, rows: 1 },
+    'A4': { cols: 1, rows: 1 },
+  },
+};
+
 // Calcular cuántas páginas de destino caben en un formato DIN de origen
 // SIEMPRE usa formato portrait (vertical) para origen y destino
+// Usa la tabla de conversiones exactas para garantizar precisión
 export const calculatePages = (sourceFormat, targetFormat = 'A4') => {
   const source = DIN_SIZES[sourceFormat];
   const target = DIN_SIZES[targetFormat];
@@ -25,24 +67,31 @@ export const calculatePages = (sourceFormat, targetFormat = 'A4') => {
     };
   }
   
-  // Siempre usar dimensiones portrait (width < height)
-  const sourceWidth = source.width;
-  const sourceHeight = source.height;
-  const targetWidth = target.width;
-  const targetHeight = target.height;
+  // Usar tabla de conversiones exactas si existe
+  const conversionData = DIN_CONVERSION_TABLE[sourceFormat]?.[targetFormat];
   
-  // Calcular cuántas páginas caben
-  const cols = Math.ceil(sourceWidth / targetWidth);
-  const rows = Math.ceil(sourceHeight / targetHeight);
+  let cols, rows;
+  
+  if (conversionData) {
+    // Usar valores exactos de la tabla
+    cols = conversionData.cols;
+    rows = conversionData.rows;
+    console.log(`Usando tabla exacta: ${sourceFormat} → ${targetFormat} = ${cols}×${rows}`);
+  } else {
+    // Fallback: calcular usando dimensiones (para casos no estándar)
+    cols = Math.ceil(source.width / target.width);
+    rows = Math.ceil(source.height / target.height);
+    console.log(`Calculando: ${sourceFormat} → ${targetFormat} = ${cols}×${rows}`);
+  }
   
   return {
     cols,
     rows,
     total: cols * rows,
-    sourceWidth,
-    sourceHeight,
-    targetWidth,
-    targetHeight
+    sourceWidth: source.width,
+    sourceHeight: source.height,
+    targetWidth: target.width,
+    targetHeight: target.height
   };
 };
 

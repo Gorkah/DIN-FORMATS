@@ -25,7 +25,11 @@ function App() {
   useEffect(() => {
     // Usar formato detectado si hay PDF, sino el seleccionado manualmente
     const sourceFormat = detectedFormat || selectedFormat;
+    console.log('Calculando páginas:');
+    console.log('  - Formato origen:', sourceFormat, '→', DIN_SIZES[sourceFormat]?.width, 'x', DIN_SIZES[sourceFormat]?.height, 'mm');
+    console.log('  - Formato destino:', targetFormat, '→', DIN_SIZES[targetFormat]?.width, 'x', DIN_SIZES[targetFormat]?.height, 'mm');
     const pages = calculatePages(sourceFormat, targetFormat);
+    console.log('  - Resultado:', pages.total, 'páginas (', pages.cols, 'x', pages.rows, ')');
     setTargetPages(pages);
   }, [selectedFormat, targetFormat, detectedFormat]);
 
@@ -50,6 +54,9 @@ function App() {
       
       // Detectar formato DIN más cercano
       const detected = detectDinFormat(dimensions.widthMm, dimensions.heightMm);
+      console.log('PDF Dimensiones:', dimensions.widthMm, 'x', dimensions.heightMm, 'mm');
+      console.log('Formato detectado:', detected);
+      console.log('DIN', detected, 'estándar:', DIN_SIZES[detected].width, 'x', DIN_SIZES[detected].height, 'mm');
       setDetectedFormat(detected);
       
       // Renderizar el PDF en el canvas
