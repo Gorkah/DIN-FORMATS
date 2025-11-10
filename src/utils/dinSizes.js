@@ -76,12 +76,10 @@ export const calculatePages = (sourceFormat, targetFormat = 'A4') => {
     // Usar valores exactos de la tabla
     cols = conversionData.cols;
     rows = conversionData.rows;
-    console.log(`Usando tabla exacta: ${sourceFormat} → ${targetFormat} = ${cols}×${rows}`);
   } else {
     // Fallback: calcular usando dimensiones (para casos no estándar)
     cols = Math.ceil(source.width / target.width);
     rows = Math.ceil(source.height / target.height);
-    console.log(`Calculando: ${sourceFormat} → ${targetFormat} = ${cols}×${rows}`);
   }
   
   return {

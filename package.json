@@ -1,7 +1,17 @@
 {
   "name": "din-format-converter",
   "version": "1.0.0",
-  "description": "Convertidor de formatos DIN para impresión en casa",
+  "description": "Herramienta web para convertir PDF de gran formato (A0, A1, A2, A3) en múltiples páginas A4 imprimibles. Permite imprimir pósters y planos en impresoras domésticas.",
+  "keywords": [
+    "pdf-converter",
+    "din-format",
+    "poster-printing",
+    "a0-to-a4",
+    "pdf-split",
+    "tiling",
+    "large-format-printing"
+  ],
+  "author": "Gorkah",
   "type": "module",
   "scripts": {
     "dev": "vite",

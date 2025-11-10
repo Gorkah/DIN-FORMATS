@@ -1,37 +1,36 @@
-# 📄 Conversor DIN - Imprime tu póster en casa
+# Conversor de Formatos DIN: De A0/A1/A2 a A4
 
-Aplicación web que convierte archivos PDF de formatos DIN grandes (A0, A1, A2, A3) en múltiples páginas A4 para que puedas imprimirlos en tu impresora casera.
+Herramienta web gratuita para dividir archivos PDF de gran formato (A0, A1, A2, A3) en múltiples páginas A4 imprimibles. Ideal para imprimir pósters, planos o presentaciones de gran tamaño en impresoras domésticas estándar.
 
-## 🎯 Características
+## Descripción
 
-- ✅ **Conversión de formatos DIN**: Soporta A0, A1, A2, A3, A4
-- 🔄 **Rotación**: Cambia entre orientación vertical y horizontal
-- 👁️ **Vista previa interactiva**: Ve cómo quedará dividido tu póster
-- ✂️ **Líneas de corte**: Visualiza dónde cortar cada página
-- 🔢 **Numeración automática**: Cada página A4 está numerada para facilitar el ensamblaje
-- 📥 **Descarga en PDF**: Genera un PDF con todas las páginas A4 listas para imprimir
-- 🎨 **Interfaz moderna**: Diseño atractivo y fácil de usar
+Esta aplicación permite convertir documentos PDF de formatos DIN grandes en páginas A4 individuales, facilitando la impresión casera de pósters, planos arquitectónicos, infografías o cualquier material de gran formato. La herramienta divide automáticamente el documento original manteniendo la proporción exacta y generando un PDF con todas las páginas listas para imprimir y ensamblar.
 
-## 🚀 Uso
+## Características Principales
 
-1. Selecciona el formato DIN de tu archivo original (ej: A0)
-2. Elige la orientación (vertical u horizontal)
-3. Sube tu archivo PDF
-4. Visualiza la vista previa con las líneas de corte
-5. Descarga el PDF con todas las páginas A4
-6. Imprime y ensambla tu póster
+**Conversión de formatos**: Soporta todos los formatos DIN estándar (A0, A1, A2, A3, A4)
 
-## 💡 Ejemplo de uso
+**Vista previa interactiva**: Visualización en tiempo real de cómo se dividirá el documento
 
-Imagina que tienes un póster diseñado en formato A0 (841 × 1189 mm):
+**Líneas de corte y numeración**: Cada página incluye guías para facilitar el ensamblaje correcto
 
-1. **Sin esta herramienta**: Tendrías que pagar una impresión costosa en A0
-2. **Con esta herramienta**: 
-   - Subes tu PDF en A0
-   - Se divide automáticamente en 8 páginas A4
-   - Imprimes las 8 páginas en tu impresora casera
-   - Las unes siguiendo las líneas de corte
-   - ¡Tienes tu póster A0 completo!
+**Procesamiento en navegador**: Todo el proceso ocurre localmente, sin enviar archivos a servidores externos
+
+**Descarga directa**: Genera un PDF optimizado con todas las páginas A4 numeradas
+
+**Interfaz intuitiva**: Diseño moderno y responsive, compatible con dispositivos móviles y escritorio
+
+## Caso de Uso
+
+Supongamos que dispone de un póster en formato DIN A0 (841 × 1189 mm) y desea imprimirlo sin acudir a un servicio de impresión especializado:
+
+1. La impresión profesional de un A0 puede costar entre 15-30€
+2. Con esta herramienta:
+   - Sube el archivo PDF original
+   - El sistema lo divide automáticamente en 16 páginas A4 (4×4)
+   - Imprime las 16 páginas en su impresora doméstica (coste aproximado: 1-2€)
+   - Une las páginas siguiendo la numeración y las guías de corte
+   - Obtiene su póster A0 completo por una fracción del coste
 
 ## 🛠️ Desarrollo
 
@@ -70,28 +69,40 @@ npm run preview
 - **jsPDF**: Generación de PDF
 - **Lucide React**: Iconos modernos
 
-## 📐 Formatos soportados
+## Tabla de Conversión de Formatos
 
-| Formato | Dimensiones (mm) | Páginas A4 (vertical) |
-|---------|------------------|----------------------|
-| DIN A0  | 841 × 1189      | 8 páginas           |
-| DIN A1  | 594 × 841       | 4 páginas           |
-| DIN A2  | 420 × 594       | 2 páginas           |
-| DIN A3  | 297 × 420       | 2 páginas           |
-| DIN A4  | 210 × 297       | 1 página            |
+| Formato Origen | Dimensiones (mm) | Páginas A4 Resultantes | Distribución |
+|----------------|------------------|------------------------|--------------|
+| DIN A0         | 841 × 1189      | 16 páginas            | 4 × 4        |
+| DIN A1         | 594 × 841       | 8 páginas             | 4 × 2        |
+| DIN A2         | 420 × 594       | 4 páginas             | 2 × 2        |
+| DIN A3         | 297 × 420       | 2 páginas             | 2 × 1        |
+| DIN A4         | 210 × 297       | 1 página              | 1 × 1        |
 
-## 🌐 GitHub Pages
+## Palabras Clave
 
-Esta aplicación está diseñada para ser desplegada en GitHub Pages. El archivo de configuración de GitHub Actions se encuentra en `.github/workflows/deploy.yml`.
+Convertir PDF A0 a A4, dividir póster grande, imprimir A0 en casa, split PDF by pages, poster printing, planos A0, impresión económica, tiling poster, imprimir plano arquitectónico, dividir PDF grande, formato DIN conversion
 
-## 📝 Licencia
+## Aplicaciones Prácticas
 
-MIT
+- **Arquitectura**: Imprimir planos y diseños técnicos
+- **Publicidad**: Crear pósters promocionales a bajo coste
+- **Educación**: Materiales didácticos de gran formato
+- **Eventos**: Carteles y señalización para conferencias
+- **Arte**: Reproducción de obras y fotografías de gran tamaño
 
-## 🤝 Contribuciones
+## Stack Tecnológico
 
-Las contribuciones son bienvenidas. Por favor, abre un issue o pull request.
+- React 18 + Vite
+- Tailwind CSS
+- PDF.js (Mozilla)
+- jsPDF
+- Lucide React Icons
 
----
+## Licencia
 
-💡 **Tip**: Para mejores resultados, asegúrate de que tu PDF original tenga buena resolución y usa papel de alta calidad al imprimir las páginas A4.
+Proyecto de código abierto bajo licencia MIT. Libre uso para fines personales y comerciales.
+
+## Contribuciones
+
+Las contribuciones son bienvenidas. Para cambios importantes, abra primero un issue para discutir los cambios propuestos.

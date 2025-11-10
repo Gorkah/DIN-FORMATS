@@ -25,11 +25,7 @@ function App() {
   useEffect(() => {
     // Usar formato detectado si hay PDF, sino el seleccionado manualmente
     const sourceFormat = detectedFormat || selectedFormat;
-    console.log('Calculando páginas:');
-    console.log('  - Formato origen:', sourceFormat, '→', DIN_SIZES[sourceFormat]?.width, 'x', DIN_SIZES[sourceFormat]?.height, 'mm');
-    console.log('  - Formato destino:', targetFormat, '→', DIN_SIZES[targetFormat]?.width, 'x', DIN_SIZES[targetFormat]?.height, 'mm');
     const pages = calculatePages(sourceFormat, targetFormat);
-    console.log('  - Resultado:', pages.total, 'páginas (', pages.cols, 'x', pages.rows, ')');
     setTargetPages(pages);
   }, [selectedFormat, targetFormat, detectedFormat]);
 
@@ -54,9 +50,6 @@ function App() {
       
       // Detectar formato DIN más cercano
       const detected = detectDinFormat(dimensions.widthMm, dimensions.heightMm);
-      console.log('PDF Dimensiones:', dimensions.widthMm, 'x', dimensions.heightMm, 'mm');
-      console.log('Formato detectado:', detected);
-      console.log('DIN', detected, 'estándar:', DIN_SIZES[detected].width, 'x', DIN_SIZES[detected].height, 'mm');
       setDetectedFormat(detected);
       
       // Renderizar el PDF en el canvas
@@ -212,10 +205,10 @@ function App() {
             <div>
               <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
                 <FileText className="w-8 h-8 text-primary" />
-                Conversor DIN
+                Conversor de Formatos DIN
               </h1>
               <p className="text-gray-600 mt-1">
-                Convierte cualquier formato DIN en páginas más pequeñas para imprimir en casa
+                Divide archivos PDF de gran formato en páginas A4 para impresión doméstica
               </p>
             </div>
           </div>
@@ -410,10 +403,10 @@ function App() {
                   <div className="text-center">
                     <Upload className="w-16 h-16 text-gray-400 mx-auto mb-4" />
                     <p className="text-gray-600 font-medium">
-                      Sube un PDF para ver la vista previa
+                      Cargue un archivo PDF para comenzar
                     </p>
                     <p className="text-gray-500 text-sm mt-2">
-                      El PDF se dividirá en páginas A4 según el formato seleccionado
+                      El documento se dividirá automáticamente según el formato seleccionado
                     </p>
                   </div>
                 </div>
@@ -547,7 +540,8 @@ function App() {
       <footer className="mt-16 border-t border-gray-200 bg-white">
         <div className="container mx-auto px-4 py-6">
           <p className="text-center text-gray-600 text-sm">
-            💡 <strong>Consejo:</strong> Imprime las páginas en tu impresora casera y únelas para crear tu póster completo. Sube tu PDF y la aplicación detectará automáticamente su tamaño.
+            <strong>Nota:</strong> Para obtener mejores resultados, utilice archivos PDF de alta resolución y papel de calidad adecuada. 
+            El procesamiento se realiza localmente en su navegador, garantizando la privacidad de sus documentos.
           </p>
         </div>
       </footer>
