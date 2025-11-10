@@ -8,36 +8,36 @@ export const DIN_SIZES = {
 };
 
 // Tabla de conversiones exactas entre formatos DIN
-// Cada formato es exactamente 2^n veces el A4
-// A0 = 16×A4, A1 = 8×A4, A2 = 4×A4, A3 = 2×A4, A4 = 1×A4
+// Cada formato es exactamente el doble del siguiente (A0=2×A1, A1=2×A2, etc.)
+// IMPORTANTE: Las divisiones consideran que cada formato DIN tiene ratio √2
 const DIN_CONVERSION_TABLE = {
   'A0': {
     'A0': { cols: 1, rows: 1 },
-    'A1': { cols: 2, rows: 1 },
-    'A2': { cols: 2, rows: 2 },
-    'A3': { cols: 4, rows: 2 },
-    'A4': { cols: 4, rows: 4 },
+    'A1': { cols: 1, rows: 2 },    // A0 contiene 2 A1 en vertical
+    'A2': { cols: 2, rows: 2 },    // A0 contiene 4 A2 (2×2)
+    'A3': { cols: 2, rows: 4 },    // A0 contiene 8 A3 (2×4)
+    'A4': { cols: 4, rows: 4 },    // A0 contiene 16 A4 (4×4)
   },
   'A1': {
-    'A0': { cols: 1, rows: 1 }, // No tiene sentido pero por completitud
+    'A0': { cols: 1, rows: 1 },
     'A1': { cols: 1, rows: 1 },
-    'A2': { cols: 2, rows: 1 },
-    'A3': { cols: 2, rows: 2 },
-    'A4': { cols: 4, rows: 2 },
+    'A2': { cols: 1, rows: 2 },    // A1 contiene 2 A2 en vertical
+    'A3': { cols: 2, rows: 2 },    // A1 contiene 4 A3 (2×2)
+    'A4': { cols: 2, rows: 4 },    // A1 contiene 8 A4 (2×4)
   },
   'A2': {
     'A0': { cols: 1, rows: 1 },
     'A1': { cols: 1, rows: 1 },
     'A2': { cols: 1, rows: 1 },
-    'A3': { cols: 2, rows: 1 },
-    'A4': { cols: 2, rows: 2 },
+    'A3': { cols: 1, rows: 2 },    // A2 contiene 2 A3 en vertical
+    'A4': { cols: 2, rows: 2 },    // A2 contiene 4 A4 (2×2)
   },
   'A3': {
     'A0': { cols: 1, rows: 1 },
     'A1': { cols: 1, rows: 1 },
     'A2': { cols: 1, rows: 1 },
     'A3': { cols: 1, rows: 1 },
-    'A4': { cols: 2, rows: 1 },
+    'A4': { cols: 1, rows: 2 },    // A3 contiene 2 A4 en vertical
   },
   'A4': {
     'A0': { cols: 1, rows: 1 },

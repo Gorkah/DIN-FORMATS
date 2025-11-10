@@ -74,9 +74,9 @@ npm run preview
 | Formato Origen | Dimensiones (mm) | Páginas A4 Resultantes | Distribución |
 |----------------|------------------|------------------------|--------------|
 | DIN A0         | 841 × 1189      | 16 páginas            | 4 × 4        |
-| DIN A1         | 594 × 841       | 8 páginas             | 4 × 2        |
+| DIN A1         | 594 × 841       | 8 páginas             | 2 × 4        |
 | DIN A2         | 420 × 594       | 4 páginas             | 2 × 2        |
-| DIN A3         | 297 × 420       | 2 páginas             | 2 × 1        |
+| DIN A3         | 297 × 420       | 2 páginas             | 1 × 2        |
 | DIN A4         | 210 × 297       | 1 página              | 1 × 1        |
 
 ## Palabras Clave
