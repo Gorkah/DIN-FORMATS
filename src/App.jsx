@@ -1,13 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Upload, Download, RotateCw, Scissors, Eye, EyeOff, Grid3x3, FileText } from 'lucide-react';
-import { DIN_SIZES, calculateA4Pages, calculateA4Grid, calculatePages, calculateGrid, detectDinFormat, calculatePagesFromDimensions, calculateGridFromDimensions } from './utils/dinSizes';
+import { Upload, Download, Scissors, Eye, EyeOff, Grid3x3, FileText } from 'lucide-react';
+import { DIN_SIZES, calculatePages, calculateGrid, detectDinFormat, calculatePagesFromDimensions, calculateGridFromDimensions } from './utils/dinSizes';
 import { loadPdfDocument, renderPdfPage, getPdfDimensions } from './utils/pdfUtils';
 import jsPDF from 'jspdf';
 
 function App() {
   const [selectedFormat, setSelectedFormat] = useState('A0');
   const [targetFormat, setTargetFormat] = useState('A4');
-  const [orientation, setOrientation] = useState('portrait');
   const [pdfFile, setPdfFile] = useState(null);
   const [pdfDocument, setPdfDocument] = useState(null);
   const [pdfDimensions, setPdfDimensions] = useState(null);
@@ -22,30 +21,29 @@ function App() {
   const fileInputRef = useRef(null);
   const dropZoneRef = useRef(null);
 
-  // Calcular páginas cuando cambie el formato u orientación
+  // Calcular páginas cuando cambie el formato
   useEffect(() => {
     if (pdfDimensions) {
       // Usar las dimensiones reales del PDF
       const pages = calculatePagesFromDimensions(
         pdfDimensions.widthMm,
         pdfDimensions.heightMm,
-        targetFormat,
-        'portrait'
+        targetFormat
       );
       setTargetPages(pages);
     } else {
       // Usar formato teórico seleccionado
-      const pages = calculatePages(selectedFormat, orientation, targetFormat, 'portrait');
+      const pages = calculatePages(selectedFormat, targetFormat);
       setTargetPages(pages);
     }
-  }, [selectedFormat, orientation, targetFormat, pdfDimensions]);
+  }, [selectedFormat, targetFormat, pdfDimensions]);
 
   // Cargar y renderizar PDF cuando se sube
   useEffect(() => {
     if (pdfFile) {
       loadPdf();
     }
-  }, [pdfFile, orientation]);
+  }, [pdfFile]);
 
   const loadPdf = async () => {
     try {
@@ -114,10 +112,6 @@ function App() {
     }
   };
 
-  const handleRotate = () => {
-    setOrientation(prev => prev === 'portrait' ? 'landscape' : 'portrait');
-  };
-
   const generateA4Pdf = async () => {
     if (!pdfDocument || !pdfDimensions) return;
     
@@ -128,8 +122,7 @@ function App() {
       const grid = calculateGridFromDimensions(
         pdfDimensions.widthMm,
         pdfDimensions.heightMm,
-        targetFormat,
-        'portrait'
+        targetFormat
       );
       
       // Crear un canvas temporal para extraer partes del PDF
@@ -264,34 +257,6 @@ function App() {
                   )}
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Orientación
-                  </label>
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => setOrientation('portrait')}
-                      className={`flex-1 py-2 px-4 rounded-lg border-2 transition-all ${
-                        orientation === 'portrait'
-                          ? 'border-primary bg-primary text-white'
-                          : 'border-gray-300 hover:border-gray-400'
-                      }`}
-                    >
-                      Vertical
-                    </button>
-                    <button
-                      onClick={() => setOrientation('landscape')}
-                      className={`flex-1 py-2 px-4 rounded-lg border-2 transition-all ${
-                        orientation === 'landscape'
-                          ? 'border-primary bg-primary text-white'
-                          : 'border-gray-300 hover:border-gray-400'
-                      }`}
-                    >
-                      Horizontal
-                    </button>
-                  </div>
-                </div>
-
                 {pdfDimensions && (
                   <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
                     <p className="text-sm font-semibold text-green-900 mb-1">
@@ -403,14 +368,6 @@ function App() {
                 </h2>
                 
                 <div className="space-y-3">
-                  <button
-                    onClick={handleRotate}
-                    className="w-full py-2 px-4 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors flex items-center justify-center gap-2"
-                  >
-                    <RotateCw className="w-4 h-4" />
-                    Rotar
-                  </button>
-                  
                   <button
                     onClick={() => setShowCutLines(!showCutLines)}
                     className="w-full py-2 px-4 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors flex items-center justify-center gap-2"
@@ -524,8 +481,8 @@ function App() {
                               {/* Cuadrícula de páginas */}
                               {(() => {
                                 const grid = pdfDimensions
-                                  ? calculateGridFromDimensions(pdfDimensions.widthMm, pdfDimensions.heightMm, targetFormat, 'portrait')
-                                  : calculateGrid(selectedFormat, orientation, targetFormat, 'portrait');
+                                  ? calculateGridFromDimensions(pdfDimensions.widthMm, pdfDimensions.heightMm, targetFormat)
+                                  : calculateGrid(selectedFormat, targetFormat);
                                 
                                 return grid.map((page) => {
                                   const x = (page.col / targetPages.cols) * 100;
