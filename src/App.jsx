@@ -23,20 +23,11 @@ function App() {
 
   // Calcular páginas cuando cambie el formato
   useEffect(() => {
-    if (pdfDimensions) {
-      // Usar las dimensiones reales del PDF
-      const pages = calculatePagesFromDimensions(
-        pdfDimensions.widthMm,
-        pdfDimensions.heightMm,
-        targetFormat
-      );
-      setTargetPages(pages);
-    } else {
-      // Usar formato teórico seleccionado
-      const pages = calculatePages(selectedFormat, targetFormat);
-      setTargetPages(pages);
-    }
-  }, [selectedFormat, targetFormat, pdfDimensions]);
+    // Usar formato detectado si hay PDF, sino el seleccionado manualmente
+    const sourceFormat = detectedFormat || selectedFormat;
+    const pages = calculatePages(sourceFormat, targetFormat);
+    setTargetPages(pages);
+  }, [selectedFormat, targetFormat, detectedFormat]);
 
   // Cargar y renderizar PDF cuando se sube
   useEffect(() => {
@@ -118,12 +109,14 @@ function App() {
     try {
       setLoading(true);
       
-      // Usar dimensiones reales del PDF
-      const grid = calculateGridFromDimensions(
-        pdfDimensions.widthMm,
-        pdfDimensions.heightMm,
-        targetFormat
-      );
+      // Usar formato DIN estándar detectado
+      const sourceFormat = detectedFormat || selectedFormat;
+      const grid = calculateGrid(sourceFormat, targetFormat);
+      
+      // Obtener dimensiones estándar del formato fuente
+      const sourceSize = DIN_SIZES[sourceFormat];
+      const sourceWidth = sourceSize.width;
+      const sourceHeight = sourceSize.height;
       
       // Crear un canvas temporal para extraer partes del PDF
       const tempCanvas = document.createElement('canvas');
@@ -144,9 +137,9 @@ function App() {
         format: [targetWidth, targetHeight]
       });
       
-      // Factor de escala del canvas al tamaño real
-      const scaleFactorX = dimensions.width / pdfDimensions.widthMm;
-      const scaleFactorY = dimensions.height / pdfDimensions.heightMm;
+      // Factor de escala del canvas al tamaño estándar DIN
+      const scaleFactorX = dimensions.width / sourceWidth;
+      const scaleFactorY = dimensions.height / sourceHeight;
       
       for (let i = 0; i < grid.length; i++) {
         const page = grid[i];
@@ -250,23 +243,26 @@ function App() {
                       </option>
                     ))}
                   </select>
-                  {pdfDimensions && (
+                  {!pdfDimensions && (
                     <p className="text-xs text-gray-500 mt-1">
-                      Se está usando el tamaño real del PDF subido
+                      Formato de referencia (sube un PDF para detección automática)
                     </p>
                   )}
                 </div>
 
-                {pdfDimensions && (
+                {pdfDimensions && detectedFormat && (
                   <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
                     <p className="text-sm font-semibold text-green-900 mb-1">
-                      PDF Detectado:
+                      ✓ PDF Detectado
                     </p>
                     <p className="text-xs text-green-700">
-                      {pdfDimensions.widthMm.toFixed(1)} × {pdfDimensions.heightMm.toFixed(1)} mm
+                      Dimensiones: {pdfDimensions.widthMm.toFixed(0)} × {pdfDimensions.heightMm.toFixed(0)} mm
                     </p>
-                    <p className="text-xs text-green-700">
-                      Formato más cercano: <strong>{detectedFormat}</strong>
+                    <p className="text-xs text-green-700 font-semibold mt-1">
+                      Usando: <strong>DIN {detectedFormat} estándar</strong>
+                    </p>
+                    <p className="text-xs text-green-600 mt-1 italic">
+                      ({DIN_SIZES[detectedFormat].width} × {DIN_SIZES[detectedFormat].height} mm)
                     </p>
                   </div>
                 )}
@@ -480,9 +476,9 @@ function App() {
                             <>
                               {/* Cuadrícula de páginas */}
                               {(() => {
-                                const grid = pdfDimensions
-                                  ? calculateGridFromDimensions(pdfDimensions.widthMm, pdfDimensions.heightMm, targetFormat)
-                                  : calculateGrid(selectedFormat, targetFormat);
+                                // Siempre usar formato DIN estándar
+                                const sourceFormat = detectedFormat || selectedFormat;
+                                const grid = calculateGrid(sourceFormat, targetFormat);
                                 
                                 return grid.map((page) => {
                                   const x = (page.col / targetPages.cols) * 100;
